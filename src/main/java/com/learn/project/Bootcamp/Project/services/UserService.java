@@ -1,0 +1,71 @@
+package com.learn.project.Bootcamp.Project.services;
+
+import com.learn.project.Bootcamp.Project.enums.ERole;
+import com.learn.project.Bootcamp.Project.model.Users.Customer;
+import com.learn.project.Bootcamp.Project.model.Users.Seller;
+import com.learn.project.Bootcamp.Project.model.token.ConfirmationToken;
+import com.learn.project.Bootcamp.Project.repository.RoleRepository;
+import com.learn.project.Bootcamp.Project.repository.TokenRepository;
+import com.learn.project.Bootcamp.Project.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    TokenRepository tokenRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    public Customer createCustomer(Customer user){
+        boolean ifExist=userExist(user.getEmail());
+        if(ifExist){
+            return null;
+        }
+
+            user.addRole(roleRepository.findByName(ERole.ROLE_CUSTOMER.toString()));
+            userRepository.save(user);
+            ConfirmationToken confirmationToken = new ConfirmationToken(user);
+            tokenRepository.save(confirmationToken);
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Complete Registration!");
+            mailMessage.setText("To confirm your account, please click here : "
+                    +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
+
+
+            emailService.sendEmail(mailMessage);
+            return user;
+
+    }
+
+    public Seller createSeller(Seller user){
+        System.out.println(user.getEmail());
+        boolean ifExist=userExist(user.getEmail());
+        if(ifExist){
+            System.out.println("exist");
+            return null;
+        }
+        else{
+            System.out.println("not ");
+            user.addRole(roleRepository.findByName(ERole.ROLE_SELLER.toString()));
+            return userRepository.save(user);
+        }
+
+    }
+
+    Boolean userExist(String email){
+        return userRepository.findByEmail(email) !=null ? true : false;
+    }
+
+
+}
