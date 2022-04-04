@@ -35,7 +35,7 @@ public class UserDto {
         this.setPasswordUpdateDate("today");
         this.setActive(false);
         this.setDeleted(false);
-        this.setPasswordUpdateDate("today");
+
     }
 
 }

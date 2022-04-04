@@ -3,12 +3,14 @@ package com.learn.project.Bootcamp.Project.services;
 import com.learn.project.Bootcamp.Project.enums.ERole;
 import com.learn.project.Bootcamp.Project.model.Users.Customer;
 import com.learn.project.Bootcamp.Project.model.Users.Seller;
+import com.learn.project.Bootcamp.Project.model.Users.User;
 import com.learn.project.Bootcamp.Project.model.token.ConfirmationToken;
 import com.learn.project.Bootcamp.Project.repository.RoleRepository;
 import com.learn.project.Bootcamp.Project.repository.TokenRepository;
 import com.learn.project.Bootcamp.Project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +26,9 @@ public class UserService {
     TokenRepository tokenRepository;
 
     @Autowired
+    private PasswordEncoder encoder;
+
+    @Autowired
     private EmailService emailService;
 
     public Customer createCustomer(Customer user){
@@ -31,8 +36,8 @@ public class UserService {
         if(ifExist){
             return null;
         }
-
             user.addRole(roleRepository.findByName(ERole.ROLE_CUSTOMER.toString()));
+            user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(user);
             ConfirmationToken confirmationToken = new ConfirmationToken(user);
             tokenRepository.save(confirmationToken);
@@ -68,4 +73,33 @@ public class UserService {
     }
 
 
+    public User forgotPassword(String email) {
+        System.out.println(email);
+        boolean ifExist=userExist(email);
+        if(ifExist){
+            User user=userRepository.findByEmail(email);
+            System.out.println(user.getFirstName());
+            System.out.println(user.getEmail());
+            System.out.println(user.getRoles());
+            ConfirmationToken confirmationToken = new ConfirmationToken(user);
+            tokenRepository.save(confirmationToken);
+            user.setResetPasswordToken(confirmationToken.getConfirmationToken());
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Forgot Password!");
+            mailMessage.setText("To reset your password, please click here : "
+                    +"http://localhost:8080/reset-password?token="+confirmationToken.getConfirmationToken());
+
+
+            emailService.sendEmail(mailMessage);
+            return user;
+        }
+        else{
+            System.out.println("User is null");
+            return null;
+
+        }
+
+
+    }
 }

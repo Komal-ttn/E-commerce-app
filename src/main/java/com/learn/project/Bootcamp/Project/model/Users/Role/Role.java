@@ -1,16 +1,16 @@
 package com.learn.project.Bootcamp.Project.model.Users.Role;
 
 import com.learn.project.Bootcamp.Project.model.Users.User;
-//import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class Role //implements GrantedAuthority
+public class Role implements GrantedAuthority
  {
 
-    //private static final long serialVersionUID=1;
+    private static final long serialVersionUID=1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +21,10 @@ public class Role //implements GrantedAuthority
     @ManyToMany(mappedBy = "roles")
     private Set<User> user;
 
-//    @Override
-//    public String getAuthority() {
-//        return name;
-//    }
+    @Override
+    public String getAuthority() {
+        return name;
+    }
 
     public int getId() {
         return id;

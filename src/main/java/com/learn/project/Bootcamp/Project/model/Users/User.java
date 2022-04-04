@@ -45,6 +45,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "id"))
     private Set<Role> roles;
 
+    @Transient
+    public String resetPasswordToken;
 
 
     public int getId() {
@@ -168,14 +170,12 @@ public class User {
         }
     }
 
-    public boolean hasRole(Role role){
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
 
-        for(Role rol:roles){
-            if(rol.getName().equals(role.getName())){
-                return true;
-            }
-        }
-        return false;
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
     }
 
     public void addAddress(Address address) {
