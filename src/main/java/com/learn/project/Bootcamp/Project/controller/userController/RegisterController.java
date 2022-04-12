@@ -36,7 +36,7 @@ public class RegisterController {
     UserService userService;
 
     @PostMapping(value = {"/register"})
-    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CustomerDto userDto) {
         //Convert DTO to entity
         Customer userRequest = modelMapper.map(userDto, Customer.class);
 
@@ -69,7 +69,7 @@ public class RegisterController {
         return new ResponseEntity<SellerDto>(userResponse, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/confirm-account", method = {RequestMethod.GET, RequestMethod.POST})
+    @PutMapping(value = "/confirm-account")
     public void confirmAcount(@RequestParam("token") String confirmationToken) {
         ConfirmationToken token = tokenRepository.findByConfirmationToken(confirmationToken);
 

@@ -13,6 +13,9 @@ import com.learn.project.Bootcamp.Project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -52,6 +55,7 @@ public class ForgotPasswordController {
     public void resetPassword(@RequestParam("token") String confirmationToken,@RequestBody ObjectNode objectNode) {
         ConfirmationToken token = tokenRepository.findByConfirmationToken(confirmationToken);
 
+        System.out.println(objectNode.fieldNames());
         if (token != null) {
             User user = userRepository.findByEmail(token.getUserEntity().getEmail());
             String newPassword = objectNode.get("newPassword").asText();
@@ -67,6 +71,24 @@ public class ForgotPasswordController {
         } else {
             System.out.println("token invalid");
         }
+
+    }
+
+
+
+
+    @PatchMapping("/updateProfile")
+    public void updateProfile(Authentication authentication, @RequestBody ObjectNode objectNode) {
+    String x=authentication.getName();
+        System.out.println(x);
+
+
+        System.out.println(objectNode.fieldNames());
+
+            String newPassword = objectNode.get("newPassword").asText();
+            String confirmPassword = objectNode.get("confirmPassword").asText();
+
+
 
     }
 

@@ -31,6 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers(HttpMethod.GET,"/couponapi/coupons","/index","/showGetCoupon","/getCoupon","/couponDetails").hasAnyRole("USER","ADMIN")
                 .mvcMatchers(HttpMethod.GET,"/viewCustomers","/viewSellers").hasRole("ADMIN")
+                .mvcMatchers("/activateCustomer/**","/deactivateCustomer/**").hasRole("ADMIN")
+                .mvcMatchers("/updateProfile").hasRole("CUSTOMER")
                 .mvcMatchers("/register","/login","/confirm-account","/reset-password","/forgot-password").permitAll()
                 .anyRequest().denyAll().and().csrf().disable().logout().logoutSuccessUrl("/");
     }

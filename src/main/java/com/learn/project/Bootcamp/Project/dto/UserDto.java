@@ -19,13 +19,13 @@ public class UserDto {
     private boolean isLocked;
     private int invalidAttempCount;
     private String passwordUpdateDate;
-
-    private String gst;
-    private BigInteger companyContact;
-    private String companyName;
-
-
-    private String contact;
+//
+//    private String gst;
+//    private BigInteger companyContact;
+//    private String companyName;
+//
+//
+//    private String contact;
 
     public UserDto(){
         this.setDeleted(Boolean.FALSE);

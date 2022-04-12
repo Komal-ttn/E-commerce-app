@@ -4,6 +4,7 @@ import com.learn.project.Bootcamp.Project.model.Users.Address;
 import com.learn.project.Bootcamp.Project.model.Users.Customer;
 import com.learn.project.Bootcamp.Project.model.Users.Role.Role;
 import com.learn.project.Bootcamp.Project.model.Users.User;
+import com.learn.project.Bootcamp.Project.repository.CustomerRepository;
 import com.learn.project.Bootcamp.Project.repository.RoleRepository;
 import com.learn.project.Bootcamp.Project.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,9 @@ class BootcampProjectApplicationTests {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	CustomerRepository customerRepository;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -75,4 +79,18 @@ class BootcampProjectApplicationTests {
 		customer.setLastName("Rawat");
 		userRepository.save(customer);
 	}
+
+	@Test
+	public void ewj(){
+		List<Customer> customers=customerRepository.findAll();
+		customers.forEach(p -> System.out.println(p.getId() + "--->" + p.getEmail()));
+
+
+		List<Object[]> partialData =customerRepository.findAllCustomer();
+		for (Object[] objects : partialData) {
+			System.out.println("Id: "+objects[0]+" FullName: "+objects[1]+"Emial: "+objects[2]);
+		}
+
+	}
+
 }

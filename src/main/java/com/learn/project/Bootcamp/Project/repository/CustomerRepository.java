@@ -10,6 +10,10 @@ import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 
-    @Query("from Customer where isActive=true")
-    List<Customer> findAllCustomers();
+    @Query("select id,concat(firstName,' ',COALESCE(middleName,''),' ',lastName) as FullName,email,isActive from Customer")// where isActive=true")
+    List<Object[]> findAllCustomer();
+
+
+    List<Customer> findAll();
 }
+ //Firstname + ' ' + ISNULL(MiddleName,'') + ' '  + LastName AS FullName

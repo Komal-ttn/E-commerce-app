@@ -42,7 +42,7 @@ public class AdminTest {
     }
     @Test
     public void createAD(){
-        User user=userRepository.findById(3).get();
+        User user=userRepository.findById(1).get();
         user.setEmail("maria@gmail.com");
         user.setLocked(false);
         userRepository.save(user);
